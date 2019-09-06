@@ -22,12 +22,11 @@ router.post('/', validateUser, (req, res) => {
     })
 });
 
-router.post('/:id/posts', validatePost, (req, res) => {
-    const rePost = req.body;
-    rePost.user_id = req.params.id;
-  
-    if (rePost) {
-      postDb.insert(rePost)
+router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
+    const post = req.body;
+    post.user_id = req.params.id;
+    if (post) {
+      postDb.insert(post)
         .then(post => {
           res.status(200).json(post);
         })
@@ -47,7 +46,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validateUserId, (req, res) => {
     const id = req.params.id;
     db.getById(id)
       .then(user => {
@@ -58,7 +57,7 @@ router.get('/:id', (req, res) => {
       });
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts',validateUserId, (req, res) => {
     const id = req.params.id;
     db.getUserPosts(id)
       .then(posts => {
@@ -69,7 +68,7 @@ router.get('/:id/posts', (req, res) => {
       });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateUserId, (req, res) => {
     const id = req.params.id;
     db.remove(id)
       .then(deleted => {

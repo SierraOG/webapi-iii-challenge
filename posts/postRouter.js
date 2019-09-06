@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
     })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validatePostId, (req, res) => {
     let id = req.params.id
     db.getById(id)
     .then(post => {
@@ -30,7 +30,7 @@ router.get('/:id', (req, res) => {
     })
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validatePostId, (req, res) => {
     let id = req.params.id
     db.remove(id)
     .then(posts => {
